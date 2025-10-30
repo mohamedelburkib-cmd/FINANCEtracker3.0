@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0f172a;
+  --bg-soft: #111827;
+  --card: #1f2937;
+  --muted: #94a3b8;
+  --text: #e5e7eb;
+  --primary: #6366f1;
+}
+
+body {
+  @apply bg-slate-900 text-slate-100;
+  background:
+    radial-gradient(1200px 600px at 20% -10%, rgba(99,102,241,.25), transparent 60%),
+    radial-gradient(1000px 600px at 120% 10%, rgba(16,185,129,.18), transparent 50%),
+    #0f172a;
+}
+
+.card {
+  @apply bg-[color:var(--card)] rounded-2xl p-5 shadow-card;
+}
+.btn { @apply rounded-xl px-4 py-2 font-semibold; }
+.btn-primary { @apply bg-indigo-500 text-white hover:bg-indigo-600; }
+.btn-secondary { @apply bg-slate-700 text-slate-100 hover:bg-slate-800; }
+.btn-ghost { @apply bg-transparent text-indigo-400 hover:bg-indigo-950/30; }
+.input { @apply w-full bg-slate-900 text-slate-100 border border-slate-600 rounded-xl px-3 py-2; }
+.input:focus { @apply outline-none ring-4 ring-indigo-500/30 border-indigo-500; }
