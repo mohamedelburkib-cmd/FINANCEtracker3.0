@@ -11,6 +11,7 @@ import {
   Legend,
   Tooltip,
 } from "chart.js";
+
 ChartJS.register(
   LineElement,
   CategoryScale,
@@ -31,11 +32,11 @@ export default function Projections() {
     const sorted = [...history].sort(
       (a, b) => new Date(a.date) - new Date(b.date)
     );
-    const first = sorted[0].date,
-      last = sorted[sorted.length - 1].date;
+    const first = sorted[0].date;
+    const last = sorted[sorted.length - 1].date;
     const spanWeeks = Math.max(weeksBetween(first, last), 1 / 7);
     const total = sum(sorted.map((h) => h.amount));
-    return total / spanWeeks; // £ per week
+    return total / spanWeeks;
   }, [history]);
 
   const labels = Array.from({ length: weeks + 1 }, (_, i) => `W${i}`);
