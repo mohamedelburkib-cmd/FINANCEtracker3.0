@@ -3,7 +3,7 @@ import Layout from "./components/Layout.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import { useAuth } from "./hooks/useAuth.js";
 
-// Pages
+// Pages (all must be default exports)
 import Dashboard from "./pages/Dashboard.jsx";
 import Transactions from "./pages/Transactions.jsx";
 import Subscriptions from "./pages/Subscriptions.jsx";
@@ -21,17 +21,20 @@ function RequireAuth({ children }) {
 }
 
 export default function App() {
+  console.log("[App] rendered");
   return (
     <ErrorBoundary>
-      {/* Debug tag to confirm React rendered */}
-      <div style={{position:'fixed',top:8,left:8,fontSize:10,opacity:.5}}>app mounted</div>
+      {/* tiny debug tag so we know app mounted */}
+      <div style={{position:'fixed',top:8,left:8,fontSize:11,opacity:.5,zIndex:9999}}>
+        app mounted
+      </div>
 
       <Routes>
-        {/* Public routes */}
+        {/* PUBLIC */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
 
-        {/* Private shell */}
+        {/* PRIVATE SHELL */}
         <Route
           path="/"
           element={
@@ -40,7 +43,6 @@ export default function App() {
             </RequireAuth>
           }
         >
-          {/* If logged in, show dashboard by default */}
           <Route index element={<Dashboard />} />
           <Route path="transactions" element={<Transactions />} />
           <Route path="subscriptions" element={<Subscriptions />} />
@@ -50,10 +52,8 @@ export default function App() {
           <Route path="settings" element={<Settings />} />
         </Route>
 
-        {/* Fallbacks */}
-        {/* If logged out and visiting '#/' send to signin */}
+        {/* FALLBACKS */}
         <Route path="" element={<Navigate to="/signin" replace />} />
-        {/* Anything else → root */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </ErrorBoundary>
