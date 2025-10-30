@@ -59,9 +59,7 @@ export default function Settings() {
       <div className="pt-2 border-t border-slate-700">
         <h4 className="font-semibold mb-1">Tips & Suggestions</h4>
         <ul className="list-disc pl-6 text-sm text-slate-300 space-y-1">
-          <li>
-            Use Subscriptions to list recurring costs—then add matching transactions monthly.
-          </li>
+          <li>Use Subscriptions to list recurring costs—then add matching transactions monthly.</li>
           <li>Keep categories consistent for better charts.</li>
           <li>Add savings contributions under the Savings tab; projections use that history.</li>
           <li>Back up your data regularly with Export JSON (you can Import later).</li>
