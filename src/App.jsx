@@ -3,6 +3,7 @@ import Layout from "./components/Layout.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import { useAuth } from "./hooks/useAuth.js";
 
+// Pages (default exports required)
 import Dashboard from "./pages/Dashboard.jsx";
 import Transactions from "./pages/Transactions.jsx";
 import Subscriptions from "./pages/Subscriptions.jsx";
