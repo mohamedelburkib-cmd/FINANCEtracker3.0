@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 export default function SignIn() {
   const { signin } = useAuth();
   const nav = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
 
@@ -13,7 +13,7 @@ export default function SignIn() {
     e.preventDefault();
     setErr("");
     try {
-      await signin({ email, password });
+      await signin({ username, password });
       nav("/");
     } catch (error) {
       setErr(error.message || "Error");
@@ -23,20 +23,18 @@ export default function SignIn() {
   return (
     <div className="max-w-md mx-auto mt-24 card">
       <h1 className="text-2xl font-bold mb-2">Sign in</h1>
-      <p className="text-sm text-slate-300 mb-4">
-        Local-only auth using your browser storage.
-      </p>
+      <p className="text-sm text-slate-300 mb-4">Local-only auth (username + password).</p>
       {err && <div className="text-sm text-red-300 mb-2">{err}</div>}
       <form onSubmit={submit} className="space-y-3">
         <div>
-          <label className="text-sm font-semibold text-slate-300">Email</label>
+          <label className="text-sm font-semibold text-slate-300">Username</label>
           <input
             className="input"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
-            placeholder="you@example.com"
+            placeholder="your username"
+            autoComplete="username"
           />
         </div>
         <div>
@@ -48,20 +46,16 @@ export default function SignIn() {
             onChange={(e) => setPassword(e.target.value)}
             required
             placeholder="••••••••"
+            autoComplete="current-password"
           />
         </div>
-        <button className="btn btn-primary w-full" type="submit">
-          Sign in
-        </button>
+        <button className="btn btn-primary w-full" type="submit">Sign in</button>
       </form>
 
       <div className="mt-4 text-sm text-center">
         No account?{" "}
-        <Link className="text-indigo-400 hover:underline" to="/signup">
-          Create one
-        </Link>
+        <Link className="text-indigo-400 hover:underline" to="/signup">Create one</Link>
       </div>
     </div>
   );
 }
-
