@@ -8,28 +8,42 @@ export default function SignIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function submit(e) {
     e.preventDefault();
     setErr("");
+    setLoading(true);
     try {
-      await signin({ username, password });
+      await signin({ username, password }); // waits for session to commit
       nav("/");
     } catch (error) {
       setErr(error.message || "Error");
+    } finally {
+      setLoading(false);
     }
   }
 
   async function useDemo() {
     setErr("");
-    await ensureDemo();
-    nav("/");
+    setLoading(true);
+    try {
+      await ensureDemo(); // waits for session to commit
+      nav("/");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function useMaster() {
     setErr("");
-    masterLogin();
-    nav("/");
+    setLoading(true);
+    try {
+      await masterLogin(); // waits for session to commit
+      nav("/");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -39,6 +53,7 @@ export default function SignIn() {
         Local-only auth (username + password). You can also use the demo or master login.
       </p>
       {err && <div className="text-sm text-red-300 mb-2">{err}</div>}
+
       <form onSubmit={submit} className="space-y-3">
         <div>
           <label className="text-sm font-semibold text-slate-300">Username</label>
@@ -49,6 +64,7 @@ export default function SignIn() {
             required
             placeholder="your username"
             autoComplete="username"
+            disabled={loading}
           />
         </div>
         <div>
@@ -61,18 +77,19 @@ export default function SignIn() {
             required
             placeholder="••••••••"
             autoComplete="current-password"
+            disabled={loading}
           />
         </div>
-        <button className="btn btn-primary w-full" type="submit">
-          Sign in
+        <button className="btn btn-primary w-full" type="submit" disabled={loading}>
+          {loading ? "Signing in…" : "Sign in"}
         </button>
       </form>
 
       <div className="mt-3 flex gap-2 flex-wrap items-center">
-        <button className="btn btn-secondary" onClick={useDemo} type="button">
+        <button className="btn btn-secondary" onClick={useDemo} type="button" disabled={loading}>
           Use demo user
         </button>
-        <button className="btn btn-ghost" onClick={useMaster} type="button">
+        <button className="btn btn-ghost" onClick={useMaster} type="button" disabled={loading}>
           Master login
         </button>
         <div className="ml-auto text-sm">
