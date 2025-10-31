@@ -14,7 +14,7 @@ export default function Layout() {
         </Link>
         {session && (
           <div className="flex items-center gap-3">
-            <span className="text-sm text-slate-300">{session.email}</span>
+            <span className="text-sm text-slate-300">@{session.username}</span>
             <button className="btn btn-secondary" onClick={signout}>Sign out</button>
           </div>
         )}
