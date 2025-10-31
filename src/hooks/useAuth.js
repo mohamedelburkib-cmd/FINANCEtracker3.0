@@ -1,8 +1,8 @@
 import { useLocalStorage } from "./useLocalStorage.js";
 
 /** ── Master login (change these anytime) ─────────────────────────── */
-const MASTER_USERNAME = "owner";      // <- you can change
-const MASTER_PASSWORD = "tracker!";   // <- you can change
+const MASTER_USERNAME = "owner";      // you can edit this
+const MASTER_PASSWORD = "tracker!";   // you can edit this
 /** ────────────────────────────────────────────────────────────────── */
 
 /** Tiny hash (only to avoid storing raw passwords; NOT real security) */
@@ -24,6 +24,9 @@ async function digest(text) {
 const LS_USERS = "ft_users";
 const LS_SESSION = "ft_session";
 
+// helper: wait one tick (lets React commit state before we continue)
+const nextTick = () => new Promise((r) => setTimeout(r, 0));
+
 export function useAuth() {
   const [users, setUsers] = useLocalStorage(LS_USERS, []);
   const [session, setSession] = useLocalStorage(LS_SESSION, null);
@@ -39,68 +42,4 @@ export function useAuth() {
       id: crypto.randomUUID?.() ?? Date.now().toString(),
       username: uname,
       passwordHash,
-      createdAt: new Date().toISOString(),
-    };
-    setUsers((prev) => [...prev, user]);
-    setSession({ userId: user.id, username: user.username });
-  }
-
-  async function signin({ username, password }) {
-    const uname = username.trim().toLowerCase();
-
-    // Master login bypass
-    if (uname === MASTER_USERNAME && password === MASTER_PASSWORD) {
-      setSession({ userId: "master", username: MASTER_USERNAME });
-      return;
-    }
-
-    const u = users.find((u) => u.username === uname);
-    if (!u) throw new Error("User not found");
-    const hash = await digest(password);
-    if (hash !== u.passwordHash) throw new Error("Invalid password");
-    setSession({ userId: u.id, username: u.username });
-  }
-
-  function signout() {
-    setSession(null);
-  }
-
-  // Seed a demo user and log into it (robust against async state)
-  async function ensureDemo() {
-    const uname = "demo";
-    let existing = users.find((u) => u.username === uname);
-    if (!existing) {
-      const passwordHash = await digest("demo");
-      const user = {
-        id: crypto.randomUUID?.() ?? Date.now().toString(),
-        username: uname,
-        passwordHash,
-        createdAt: new Date().toISOString(),
-      };
-      setUsers((prev) => {
-        // return new array and also update `existing` in this closure
-        const next = [...prev, user];
-        existing = user;
-        return next;
-      });
-    }
-    // Use the existing/newly-created user
-    const u = existing || users.find((x) => x.username === uname);
-    setSession({ userId: u?.id ?? "demo", username: uname });
-  }
-
-  // Explicit master login from UI (no form)
-  function masterLogin() {
-    setSession({ userId: "master", username: MASTER_USERNAME });
-  }
-
-  return {
-    users,
-    session,
-    signup,
-    signin,
-    signout,
-    ensureDemo,
-    masterLogin,
-  };
-}
+      createdAt: ne
