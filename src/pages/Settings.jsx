@@ -12,7 +12,7 @@ export default function Settings() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `financial-tracker-${session.email}.json`;
+    a.download = `financial-tracker-${session.username}.json`;
     a.click();
     URL.revokeObjectURL(url);
   }
