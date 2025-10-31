@@ -28,29 +28,14 @@ export default function SignUp() {
       <form onSubmit={submit} className="space-y-3">
         <div>
           <label className="text-sm font-semibold text-slate-300">Username</label>
-          <input
-            className="input"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            placeholder="e.g. mohamed"
-          />
+          <input className="input" value={username} onChange={e=>setUsername(e.target.value)} required placeholder="e.g. mohamed" />
         </div>
         <div>
           <label className="text-sm font-semibold text-slate-300">Password</label>
-          <input
-            className="input"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            placeholder="••••••••"
-            autoComplete="new-password"
-          />
+          <input className="input" type="password" value={password} onChange={e=>setPassword(e.target.value)} required placeholder="••••••••" autoComplete="new-password" />
         </div>
         <button className="btn btn-primary w-full" type="submit">Sign up</button>
       </form>
-
       <div className="mt-4 text-sm text-center">
         Have an account?{" "}
         <Link className="text-indigo-400 hover:underline" to="/signin">Sign in</Link>
