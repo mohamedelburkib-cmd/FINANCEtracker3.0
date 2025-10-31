@@ -1,11 +1,10 @@
 import { useLocalStorage } from "./useLocalStorage.js";
 
-/** ── Master login (change these anytime) ─────────────────────────── */
-const MASTER_USERNAME = "owner";      // you can edit this
-const MASTER_PASSWORD = "tracker!";   // you can edit this
-/** ────────────────────────────────────────────────────────────────── */
+/* Master login (change if you want) */
+const MASTER_USERNAME = "owner";
+const MASTER_PASSWORD = "tracker!";
 
-/** Tiny hash (only to avoid storing raw passwords; NOT real security) */
+/* Small hash just to avoid storing raw passwords (not real security) */
 async function digest(text) {
   try {
     if (crypto?.subtle && location.protocol === "https:") {
@@ -24,7 +23,7 @@ async function digest(text) {
 const LS_USERS = "ft_users";
 const LS_SESSION = "ft_session";
 
-// helper: wait one tick (lets React commit state before we continue)
+// wait one event loop tick so React state commits before we navigate
 const nextTick = () => new Promise((r) => setTimeout(r, 0));
 
 export function useAuth() {
@@ -42,4 +41,64 @@ export function useAuth() {
       id: crypto.randomUUID?.() ?? Date.now().toString(),
       username: uname,
       passwordHash,
-      createdAt: ne
+      createdAt: new Date().toISOString(),
+    };
+    setUsers((prev) => [...prev, user]);
+    setSession({ userId: user.id, username: user.username });
+    await nextTick();
+  }
+
+  async function signin({ username, password }) {
+    const uname = username.trim().toLowerCase();
+
+    // master bypass
+    if (uname === MASTER_USERNAME && password === MASTER_PASSWORD) {
+      setSession({ userId: "master", username: MASTER_USERNAME });
+      await nextTick();
+      return;
+    }
+
+    const u = users.find((x) => x.username === uname);
+    if (!u) throw new Error("User not found");
+
+    const hash = await digest(password);
+    if (hash !== u.passwordHash) throw new Error("Invalid password");
+
+    setSession({ userId: u.id, username: u.username });
+    await nextTick();
+  }
+
+  function signout() {
+    setSession(null);
+  }
+
+  // seed + login to demo
+  async function ensureDemo() {
+    const uname = "demo";
+    let existing = users.find((u) => u.username === uname);
+    if (!existing) {
+      const passwordHash = await digest("demo");
+      const user = {
+        id: crypto.randomUUID?.() ?? Date.now().toString(),
+        username: uname,
+        passwordHash,
+        createdAt: new Date().toISOString(),
+      };
+      setUsers((prev) => {
+        const next = [...prev, user];
+        existing = user;
+        return next;
+      });
+    }
+    setSession({ userId: (existing?.id ?? "demo"), username: uname });
+    await nextTick();
+  }
+
+  // explicit master login from UI
+  async function masterLogin() {
+    setSession({ userId: "master", username: MASTER_USERNAME });
+    await nextTick();
+  }
+
+  return { users, session, signup, signin, signout, ensureDemo, masterLogin };
+}
