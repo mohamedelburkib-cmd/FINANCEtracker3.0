@@ -28,7 +28,7 @@ export default function SignIn() {
     setErr("");
     setLoading(true);
     try {
-      await ensureDemo(); // waits for session to commit
+      await ensureDemo(); // waits for session
       nav("/");
     } finally {
       setLoading(false);
@@ -39,7 +39,7 @@ export default function SignIn() {
     setErr("");
     setLoading(true);
     try {
-      await masterLogin(); // waits for session to commit
+      await masterLogin(); // waits for session
       nav("/");
     } finally {
       setLoading(false);
@@ -69,7 +69,7 @@ export default function SignIn() {
         </div>
         <div>
           <label className="text-sm font-semibold text-slate-300">Password</label>
-          <input
+        <input
             className="input"
             type="password"
             value={password}
