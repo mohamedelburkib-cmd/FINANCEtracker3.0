@@ -46,7 +46,7 @@ export default function Settings() {
       } catch (err) {
         alert("Import failed: " + (err?.message || String(err)));
       } finally {
-        // reset the input so the same file can be chosen again
+        // allow selecting the same file again later
         e.target.value = "";
       }
     };
@@ -62,7 +62,7 @@ export default function Settings() {
     setSavings({
       emergency: { targetMonths: 3, monthlyExpenses: 0, balance: 0, history: [] },
       general: { name: "General Savings", balance: 0, history: [] },
-      investments: { name: "Investments (manual)", balance: 0, history: [] },
+      investments: { name: "Investments (manual)", balance: 0, history: 0 ? [] : [] },
     });
     setSubscriptions([]);
     alert("Cleared.");
@@ -95,3 +95,31 @@ export default function Settings() {
 
         <button className="btn btn-ghost" onClick={clearAll} type="button">
           Clear all data
+        </button>
+
+        <span className="text-sm text-slate-400">
+          Signed in as <span className="font-semibold">@{session?.username}</span>
+        </span>
+      </div>
+
+      <div className="pt-2 border-t border-slate-700">
+        <h4 className="font-semibold mb-2">Tips</h4>
+        <ul className="list-disc pl-6 text-sm text-slate-300 space-y-1">
+          <li>
+            Use <strong>Subscriptions</strong> to track recurring costs; add a matching
+            transaction monthly for accurate charts.
+          </li>
+          <li>
+            Keep categories consistent (e.g., “Rent”, “Groceries”, “Fuel”) to
+            get clearer insights on the dashboard.
+          </li>
+          <li>
+            Add contributions under <strong>Savings</strong>; the{" "}
+            <strong>Projections</strong> page uses your contribution history.
+          </li>
+          <li>Back up regularly with Export JSON.</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
