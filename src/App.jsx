@@ -20,21 +20,35 @@ function RequireAuth({ children }) {
   return children;
 }
 
+function RedirectIfAuth({ children }) {
+  const { session } = useAuth();
+  if (session) return <Navigate to="/dashboard" replace />;
+  return children;
+}
+
 export default function App() {
-  console.log("[App] rendered");
   return (
     <ErrorBoundary>
-      {/* tiny debug tag so we know app mounted */}
-      <div style={{position:'fixed',top:8,left:8,fontSize:11,opacity:.5,zIndex:9999}}>
-        app mounted
-      </div>
-
       <Routes>
-        {/* PUBLIC */}
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
+        {/* PUBLIC AUTH ROUTES */}
+        <Route
+          path="/signin"
+          element={
+            <RedirectIfAuth>
+              <SignIn />
+            </RedirectIfAuth>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <RedirectIfAuth>
+              <SignUp />
+            </RedirectIfAuth>
+          }
+        />
 
-        {/* PRIVATE SHELL */}
+        {/* PRIVATE ROUTES WITH LAYOUT */}
         <Route
           path="/"
           element={
@@ -43,19 +57,51 @@ export default function App() {
             </RequireAuth>
           }
         >
-          <Route index element={<Dashboard />} />
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="transactions" element={<Transactions />} />
           <Route path="subscriptions" element={<Subscriptions />} />
           <Route path="savings" element={<Savings />} />
-          <Route path="calculator" element={<EmergencyCalc />} />
-          <Route path="projections" element={<Projections />} />
-          <Route path="settings" element={<Settings />} />
-        </Route>
+          <Route path="emergency-calc" element={<EmergencyCalc />} />
+          <Route path="projections>
 
-        {/* FALLBACKS */}
-        <Route path="" element={<Navigate to="/signin" replace />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </ErrorBoundary>
+          <div className="mt-6 pt-6 border-t border-slate-700">
+            <p className="text-center text-slate-400 text-sm mb-4">Or try with</p>
+            <div className="space-y-3">
+              <button
+                onClick={handleDemo}
+                disabled={loading}
+                className="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 px-4 rounded-xl transition-all duration-200 disabled:opacity-50"
+              >
+                🚀 Demo Account
+              </button>
+              <button
+                onClick={handleMaster}
+                disabled={loading}
+                className="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 px-4 rounded-xl transition-all duration-200 disabled:opacity-50"
+              >
+                🔑 Master Login
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Features */}
+        <div className="mt-8 grid grid-cols-3 gap-4 text-center">
+          <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+            <span className="text-2xl mb-2 block">📊</span>
+            <p className="text-slate-300 text-sm">Track Expenses</p>
+          </div>
+          <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+            <span className="text-2xl mb-2 block">💡</span>
+            <p className="text-slate-300 text-sm">Smart Insights</p>
+          </div>
+          <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+            <span className="text-2xl mb-2 block">🎯</span>
+            <p className="text-slate-300 text-sm">Set Goals</p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
