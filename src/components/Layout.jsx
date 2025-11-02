@@ -1,90 +1,95 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth.js";
-import { useState } from "react";
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import { useState } from 'react';
 
-const navItems = [
-  { to: "/dashboard", label: "Dashboard", icon: "📊" },
-  { to: "/transactions", label: "Transactions", icon: "💳" },
-  { to: "/subscriptions", label: "Subscriptions", icon: "🔄" },
-  { to: "/savings", label: "Savings", icon: "💰" },
-  { to: "/emergency-calc", label: "Emergency Fund", icon: "🚨" },
-  { to: "/projections", label: "Projections", icon: "📈" },
-  { to: "/settings", label: "Settings", icon: "⚙️" },
+const nav = [
+  { name: 'Dashboard', href: '/dashboard', icon: '📊' },
+  { name: 'Transactions', href: '/transactions', icon: '💳' },
+  { name: 'Investments', href: '/investments', icon: '📈' },
+  { name: 'Subscriptions', href: '/subscriptions', icon: '🔄' },
+  { name: 'Savings', href: '/savings', icon: '💰' },
+  { name: 'Emergency Fund', href: '/emergency-calc', icon: '🚨' },
+  { name: 'Projections', href: '/projections', icon: '📉' },
+  { name: 'Settings', href: '/settings', icon: '⚙️' },
 ];
 
 export default function Layout() {
   const { session, signout } = useAuth();
-  const location = useLocation();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const handleLogout = () => {
-    signout();
-  };
+  const { pathname } = useLocation();
+  const [open, setOpen] = useState(false);
 
   if (!session) return <Outlet />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="flex h-screen bg-bg text-text-primary">
+      {/* Mobile overlay */}
+      {open && (
+        <button
+          className="lg:hidden fixed inset-0 z-30 bg-black/50"
+          onClick={() => setOpen(false)}
+          aria-label="Close menu"
+        />
+      )}
+
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 z-50 w-64 bg-slate-800/90 backdrop-blur-sm border-r border-slate-700">
-        <div className="flex flex-col h-full">
-          {/* Logo Section */}
-          <div className="p-6 border-b border-slate-700">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-              FinanceTracker
-            </h1>
-            <p className="text-sm text-slate-400 mt-1">Welcome back, {session.username}</p>
-          </div>
-
-          {/* Navigation */}
-          <nav className="flex-1 p-4">
-            <ul className="space-y-2">
-              {navItems.map((item) => (
-                <li key={item.to}>
-                  <Link
-                    to={item.to}
-                    className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
-                      location.pathname === item.to
-                        ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg"
-                        : "text-slate-300 hover:bg-slate-700/50 hover:text-white"
-                    }`}
-                  >
-                    <span className="text-xl">{item.icon}</span>
-                    <span className="font-medium">{item.label}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* User Section */}
-          <div className="p-4 border-t border-slate-700">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
-                  <span className="text-white font-semibold">
-                    {session.username?.charAt(0).toUpperCase()}
-                  </span>
-                </div>
-                <div>
-                  <p className="text-white font-medium">{session.username}</p>
-                  <p className="text-slate-400 text-sm">Active</p>
-                </div>
-              </div>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="w-full bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 rounded-xl px-4 py-2 font-medium transition-all duration-200"
-            >
-              🚪 Sign Out
-            </button>
-          </div>
+      <aside
+        className={`fixed lg:relative z-40 w-64 h-full bg-surface border-r border-border transition-transform ${
+          open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        }`}
+      >
+        <div className="p-4 flex items-center justify-between">
+          <span className="font-bold text-xl">FinanceTracker</span>
+          <button
+            className="lg:hidden"
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="ml-64 min-h-screen">
-        <main className="p-8">
+        <nav className="px-4 space-y-2">
+          {nav.map((n) => (
+            <Link
+              key={n.href}
+              to={n.href}
+              onClick={() => setOpen(false)}
+              className={`flex items-center gap-3 px-3 py-2 rounded-md transition ${
+                pathname === n.href
+                  ? 'bg-accent-primary text-white'
+                  : 'hover:bg-border'
+              }`}
+            >
+              <span>{n.icon}</span>
+              <span>{n.name}</span>
+            </Link>
+          ))}
+        </nav>
+
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border">
+          <button
+            onClick={signout}
+            className="w-full btn btn-danger text-sm"
+          >
+            Logout
+          </button>
+        </div>
+      </aside>
+
+      {/* Main */}
+      <div className="flex-1 flex flex-col">
+        <header className="lg:hidden bg-surface border-b border-border p-4 flex items-center justify-between">
+          <button
+            onClick={() => setOpen(true)}
+            aria-label="Open menu"
+          >
+            ☰
+          </button>
+          <span className="font-semibold">{nav.find((n) => n.href === pathname)?.name}</span>
+          <div /> {/* spacer */}
+        </header>
+
+        <main className="flex-1 p-4 lg:p-6 overflow-auto">
           <Outlet />
         </main>
       </div>
