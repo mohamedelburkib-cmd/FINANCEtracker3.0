@@ -1,98 +1,85 @@
-import { Link, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { useState } from 'react';
+import { Outlet, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useAuth } from "../hooks/useAuth.js";
+import Nav from "./Nav.jsx";
+import { Menu, X } from "lucide-react";
 
-const nav = [
-  { name: 'Dashboard', href: '/dashboard', icon: '📊' },
-  { name: 'Transactions', href: '/transactions', icon: '💳' },
-  { name: 'Investments', href: '/investments', icon: '📈' },
-  { name: 'Subscriptions', href: '/subscriptions', icon: '🔄' },
-  { name: 'Savings', href: '/savings', icon: '💰' },
-  { name: 'Emergency Fund', href: '/emergency-calc', icon: '🚨' },
-  { name: 'Projections', href: '/projections', icon: '📉' },
-  { name: 'Settings', href: '/settings', icon: '⚙️' },
-];
+const LS_UI_SIDEBAR = "ft_ui_sidebar_open";
 
 export default function Layout() {
   const { session, signout } = useAuth();
-  const { pathname } = useLocation();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);           // desktop sidebar
+  const [mobile, setMobile] = useState(false);      // mobile slide-over
 
-  if (!session) return <Outlet />;
+  useEffect(() => {
+    const v = localStorage.getItem(LS_UI_SIDEBAR);
+    if (v !== null) setOpen(v === "1");
+  }, []);
+  useEffect(() => {
+    localStorage.setItem(LS_UI_SIDEBAR, open ? "1" : "0");
+  }, [open]);
 
   return (
-    <div className="flex h-screen bg-bg text-text-primary">
-      {/* Mobile overlay */}
-      {open && (
-        <button
-          className="lg:hidden fixed inset-0 z-30 bg-black/50"
-          onClick={() => setOpen(false)}
-          aria-label="Close menu"
-        />
-      )}
-
+    <div className="h-full grid grid-cols-1 md:grid-cols-[260px_minmax(0,1fr)]">
       {/* Sidebar */}
-      <aside
-        className={`fixed lg:relative z-40 w-64 h-full bg-surface border-r border-border transition-transform ${
-          open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        }`}
-      >
-        <div className="p-4 flex items-center justify-between">
-          <span className="font-bold text-xl">FinanceTracker</span>
-          <button
-            className="lg:hidden"
-            onClick={() => setOpen(false)}
-            aria-label="Close menu"
-          >
-            ✕
-          </button>
-        </div>
-
-        <nav className="px-4 space-y-2">
-          {nav.map((n) => (
-            <Link
-              key={n.href}
-              to={n.href}
-              onClick={() => setOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md transition ${
-                pathname === n.href
-                  ? 'bg-accent-primary text-white'
-                  : 'hover:bg-border'
-              }`}
-            >
-              <span>{n.icon}</span>
-              <span>{n.name}</span>
+      <aside className={`sidebar hidden md:block ${open ? "w-[260px]" : "w-[88px]"} transition-all`}>
+        <div className="h-full p-3 flex flex-col">
+          <div className={`flex items-center ${open ? "justify-between" : "justify-center"} mb-4`}>
+            <Link to="/" className="flex items-center gap-2">
+              <div className="text-lg font-bold">FinTrack</div>
             </Link>
-          ))}
-        </nav>
-
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border">
-          <button
-            onClick={signout}
-            className="w-full btn btn-danger text-sm"
-          >
-            Logout
-          </button>
+            <button className="btn btn-ghost px-2 py-1" onClick={() => setOpen((v) => !v)} title="Toggle sidebar">
+              {open ? <X size={16} /> : <Menu size={16} />}
+            </button>
+          </div>
+          <Nav collapsed={!open} />
+          <div className="mt-auto pt-3 border-t border-slate-800/60 flex items-center justify-between">
+            {!open ? (
+              <button className="btn btn-secondary w-full" onClick={signout}>↩</button>
+            ) : (
+              <>
+                <div className="text-xs text-slate-400">@{session?.username}</div>
+                <button className="btn btn-secondary" onClick={signout}>Sign out</button>
+              </>
+            )}
+          </div>
         </div>
       </aside>
 
-      {/* Main */}
-      <div className="flex-1 flex flex-col">
-        <header className="lg:hidden bg-surface border-b border-border p-4 flex items-center justify-between">
-          <button
-            onClick={() => setOpen(true)}
-            aria-label="Open menu"
-          >
-            ☰
-          </button>
-          <span className="font-semibold">{nav.find((n) => n.href === pathname)?.name}</span>
-          <div /> {/* spacer */}
-        </header>
-
-        <main className="flex-1 p-4 lg:p-6 overflow-auto">
-          <Outlet />
-        </main>
+      {/* Mobile top bar */}
+      <div className="md:hidden sticky top-0 z-30 bg-slate-950/70 border-b border-slate-800/60 backdrop-blur">
+        <div className="px-4 py-3 flex items-center justify-between">
+          <button className="btn btn-ghost px-2" onClick={() => setMobile(true)}><Menu size={18} /></button>
+          <Link to="/" className="font-bold">FinTrack</Link>
+          <div className="text-xs text-slate-400">@{session?.username}</div>
+        </div>
       </div>
+
+      {/* Mobile slide-over */}
+      {mobile && (
+        <div className="fixed inset-0 z-40 md:hidden">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setMobile(false)} />
+          <div className="absolute left-0 top-0 bottom-0 w-[260px] sidebar p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="font-bold">Menu</div>
+              <button className="btn btn-ghost px-2" onClick={() => setMobile(false)}><X size={18} /></button>
+            </div>
+            <Nav collapsed={false} />
+            <div className="pt-3 border-t border-slate-800/60">
+              <div className="text-xs text-slate-400 mb-2">@{session?.username}</div>
+              <button className="btn btn-secondary w-full" onClick={signout}>Sign out</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main */}
+      <main className="p-4 md:p-8">
+        <Outlet />
+        <footer className="text-center text-xs text-slate-400 mt-12">
+          Data stored locally • Designed for speed
+        </footer>
+      </main>
     </div>
   );
 }
