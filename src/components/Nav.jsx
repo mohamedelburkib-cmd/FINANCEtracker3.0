@@ -1,32 +1,30 @@
 import { NavLink } from "react-router-dom";
+import { LayoutGrid, CreditCard, CalendarClock, PiggyBank, Calculator, LineChart, Settings, Wallet } from "lucide-react";
 
-const links = [
-  { to: "/", label: "Dashboard", end: true },
-  { to: "/transactions", label: "Transactions" },
-  { to: "/subscriptions", label: "Subscriptions" },
-  { to: "/savings", label: "Savings" },
-  { to: "/calculator", label: "Emergency Calc" },
-  { to: "/projections", label: "Projections" },
-  { to: "/settings", label: "Settings" },
-];
+export default function Nav({ collapsed }) {
+  const item = (to, label, Icon) => (
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `navlink ${isActive ? "navlink-active" : ""} ${collapsed ? "justify-center" : ""}`
+      }
+    >
+      <Icon size={18} />
+      {!collapsed && <span>{label}</span>}
+    </NavLink>
+  );
 
-export default function Nav() {
   return (
-    <nav className="mb-6 grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
-      {links.map((l) => (
-        <NavLink
-          key={l.to}
-          to={l.to}
-          end={l.end}
-          className={({ isActive }) =>
-            `card text-center font-medium transition ${
-              isActive ? "outline outline-2 outline-indigo-500/60" : ""
-            }`
-          }
-        >
-          {l.label}
-        </NavLink>
-      ))}
+    <nav className="space-y-1">
+      {item("/", "Dashboard", LayoutGrid)}
+      {item("/transactions", "Transactions", CreditCard)}
+      {item("/subscriptions", "Subscriptions", CalendarClock)}
+      {item("/savings", "Savings", PiggyBank)}
+      {item("/calculator", "Emergency Calc", Calculator)}
+      {item("/projections", "Projections", LineChart)}
+      {item("/investments", "Investments", Wallet)}
+      <div className="pt-3 border-t border-slate-800/60" />
+      {item("/settings", "Settings", Settings)}
     </nav>
   );
 }
