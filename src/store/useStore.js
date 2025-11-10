@@ -10,6 +10,7 @@ const defaultState = {
     general: { name: "General Savings", balance: 0, history: [] },
     investments: { name: "Investments (manual)", balance: 0, history: [] },
   },
+  goals: [], // NEW
 };
 
 export function useStore() {
@@ -17,16 +18,16 @@ export function useStore() {
 
   // TRANSACTIONS
   function addTransaction(t) {
-    setData((prev) => ({
-      ...prev,
-      transactions: [t, ...prev.transactions],
-    }));
+    setData((prev) => ({ ...prev, transactions: [t, ...prev.transactions] }));
   }
   function deleteTransaction(id) {
     setData((prev) => ({
       ...prev,
       transactions: prev.transactions.filter((x) => x.id !== id),
     }));
+  }
+  function setTransactions(next) {
+    setData((prev) => ({ ...prev, transactions: next }));
   }
 
   // SAVINGS
@@ -39,9 +40,18 @@ export function useStore() {
     setData((prev) => ({ ...prev, subscriptions: next }));
   }
 
-  // transactions setter (used by Settings import)
-  function setTransactions(next) {
-    setData((prev) => ({ ...prev, transactions: next }));
+  // GOALS
+  function addGoal(g) {
+    setData((prev) => ({ ...prev, goals: [g, ...prev.goals] }));
+  }
+  function updateGoal(id, partial) {
+    setData((prev) => ({
+      ...prev,
+      goals: prev.goals.map((g) => (g.id === id ? { ...g, ...partial } : g)),
+    }));
+  }
+  function deleteGoal(id) {
+    setData((prev) => ({ ...prev, goals: prev.goals.filter((g) => g.id !== id) }));
   }
 
   return {
@@ -49,11 +59,16 @@ export function useStore() {
     transactions: data.transactions,
     subscriptions: data.subscriptions,
     savings: data.savings,
+    goals: data.goals,
+
     // actions
     addTransaction,
     deleteTransaction,
+    setTransactions,
     setSavings,
     setSubscriptions,
-    setTransactions,
+    addGoal,
+    updateGoal,
+    deleteGoal,
   };
 }
