@@ -1,4 +1,3 @@
-// src/pages/Dashboard.jsx
 import CashflowChart from "../charts/CashflowChart.jsx";
 import SpendByCategoryChart from "../charts/SpendByCategoryChart.jsx";
 
