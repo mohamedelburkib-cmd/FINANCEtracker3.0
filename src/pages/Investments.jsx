@@ -26,9 +26,6 @@ export default function Investments() {
     <div className="space-y-4">
       <div className="card">
         <h2 className="text-lg font-semibold mb-3">Investments</h2>
-        <p className="text-sm text-slate-300 mb-2">
-          Track holdings with quantity and average cost. (Live prices can be added later.)
-        </p>
         <form onSubmit={addRow} className="grid md:grid-cols-5 gap-3">
           <input name="symbol" className="input" placeholder="Ticker (e.g., AAPL)" />
           <input name="qty" className="input" type="number" step="0.0001" placeholder="Qty" />
