@@ -2,73 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== THEME ===== */
 :root {
   --bg-start: #0b1220;
   --bg-end: #0e1a33;
-  --card: #101827;
-  --card-2: #0f172a;
-  --muted: #a3b2d0;
-  --text: #e8eefc;
-  --brand: #6366f1;
-  --brand-2: #7c3aed;
-  --brand-3: #06b6d4;
   --ring: rgba(99, 102, 241, 0.3);
 }
 
-html, body, #root {
-  height: 100%;
-}
+html, body, #root { height: 100%; }
 
 body {
-  @apply text-[15px] leading-relaxed;
-  color: var(--text);
+  color: #e8eefc;
   background: radial-gradient(1000px 700px at 10% -10%, #13213e 0%, transparent 60%),
               radial-gradient(1200px 800px at 110% 20%, #111c35 0%, transparent 60%),
               linear-gradient(180deg, var(--bg-start), var(--bg-end));
+  @apply text-[15px] leading-relaxed;
 }
 
 @layer components {
   .card {
-    @apply rounded-2xl p-5 md:p-6 shadow-lg border border-slate-800/60;
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    @apply rounded-2xl p-5 md:p-6 shadow-lg border border-slate-800/60 bg-slate-900/30;
     backdrop-filter: blur(6px);
   }
-
   .input {
     @apply w-full rounded-xl bg-slate-900/60 border border-slate-700/70 px-3.5 py-2.5 outline-none;
   }
   .input:focus {
     box-shadow: 0 0 0 4px var(--ring);
-    border-color: var(--brand);
+    border-color: rgb(99 102 241);
   }
-
-  .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 font-medium transition active:scale-[.99];
-  }
-  .btn-primary {
-    @apply bg-indigo-600 hover:bg-indigo-500;
-  }
-  .btn-secondary {
-    @apply bg-slate-800 hover:bg-slate-700;
-  }
-  .btn-ghost {
-    @apply bg-transparent hover:bg-slate-800/60 border border-slate-700/70;
-  }
-
-  .pill {
-    @apply text-xs px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700/70 text-slate-300;
-  }
-
-  .sidebar {
-    @apply h-full bg-slate-950/70 border-r border-slate-800/60;
-    backdrop-filter: blur(6px);
-  }
-
-  .navlink {
-    @apply flex items-center gap-3 rounded-xl px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800/70 transition;
-  }
-  .navlink-active {
-    @apply bg-indigo-600/20 text-white border border-indigo-500/40;
-  }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 font-medium transition active:scale-[.99]; }
+  .btn-primary { @apply bg-indigo-600 hover:bg-indigo-500; }
+  .btn-secondary { @apply bg-slate-800 hover:bg-slate-700; }
+  .btn-ghost { @apply bg-transparent hover:bg-slate-800/60 border border-slate-700/70; }
+  .pill { @apply text-xs px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700/70 text-slate-300; }
+  .sidebar { @apply h-full bg-slate-950/70 border-r border-slate-800/60; backdrop-filter: blur(6px); }
+  .navlink { @apply flex items-center gap-3 rounded-xl px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800/70 transition; }
+  .navlink-active { @apply bg-indigo-600/20 text-white border border-indigo-500/40; }
 }
