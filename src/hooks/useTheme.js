@@ -1,4 +1,3 @@
-// src/hooks/useTheme.js
 import { useEffect, useState } from "react";
 
 const LS_THEME = "ft_ui_theme"; // 'light' | 'dark'
