@@ -17,7 +17,7 @@ export default function Transactions() {
   function onQuickAdd(e) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
-    const kind = fd.get("kind"); // "expense" or "payment"
+    const kind = fd.get("kind");
     const amount = Number(fd.get("amount") || 0);
     const category = fd.get("category") || "Other";
     const note = fd.get("note") || "";
@@ -26,7 +26,7 @@ export default function Transactions() {
     addTransaction({
       id: crypto.randomUUID?.() ?? Date.now().toString(),
       kind: kind === "payment" ? "payment" : "expense",
-      amount: kind === "payment" ? Math.abs(amount) : Math.abs(amount),
+      amount: Math.abs(amount),
       category,
       note,
       date,
