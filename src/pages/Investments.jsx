@@ -26,6 +26,9 @@ export default function Investments() {
     <div className="space-y-4">
       <div className="card">
         <h2 className="text-lg font-semibold mb-3">Investments</h2>
+        <p className="text-sm" style={{ color: "var(--muted)" }}>
+          Track holdings with quantity and average cost. (Live prices can be added later.)
+        </p>
         <form onSubmit={addRow} className="grid md:grid-cols-5 gap-3">
           <input name="symbol" className="input" placeholder="Ticker (e.g., AAPL)" />
           <input name="qty" className="input" type="number" step="0.0001" placeholder="Qty" />
@@ -38,12 +41,14 @@ export default function Investments() {
       <div className="card">
         <div className="flex justify-between items-center mb-3">
           <h3 className="font-semibold">Holdings</h3>
-          <div className="text-sm text-slate-300">Total cost: <span className="font-semibold">{fmtGBP.format(totalCost)}</span></div>
+          <div className="text-sm" style={{ color: "var(--muted)" }}>
+            Total cost: <span className="font-semibold">{fmtGBP.format(totalCost)}</span>
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="text-slate-400">
-              <tr className="text-left border-b border-slate-800/60">
+            <thead style={{ color: "var(--muted)" }}>
+              <tr className="text-left" style={{ borderBottom: "1px solid var(--border)" }}>
                 <th className="py-2 pr-2">Symbol</th>
                 <th className="py-2 pr-2">Qty</th>
                 <th className="py-2 pr-2">Avg cost</th>
@@ -54,10 +59,10 @@ export default function Investments() {
             </thead>
             <tbody>
               {rows.length === 0 && (
-                <tr><td colSpan={6} className="py-6 text-center text-slate-400">No holdings yet.</td></tr>
+                <tr><td colSpan={6} className="py-6 text-center" style={{ color: "var(--muted)" }}>No holdings yet.</td></tr>
               )}
               {rows.map(r => (
-                <tr key={r.id} className="border-b border-slate-800/50">
+                <tr key={r.id} style={{ borderBottom: "1px solid var(--border)" }}>
                   <td className="py-2 pr-2 font-semibold">{r.symbol}</td>
                   <td className="py-2 pr-2">{r.qty}</td>
                   <td className="py-2 pr-2">{fmtGBP.format(r.costPer)}</td>
