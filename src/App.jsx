@@ -4,7 +4,6 @@ import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import { useAuth } from "./hooks/useAuth.js";
 import { AnimatePresence, motion } from "framer-motion";
 
-// Pages
 import Dashboard from "./pages/Dashboard.jsx";
 import Transactions from "./pages/Transactions.jsx";
 import Subscriptions from "./pages/Subscriptions.jsx";
@@ -21,16 +20,9 @@ function RequireAuth({ children }) {
   if (!session) return <Navigate to="/signin" replace />;
   return children;
 }
-
 function Page({ children }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.18 }}
-      className="space-y-4"
-    >
+    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.18 }} className="space-y-4">
       {children}
     </motion.div>
   );
@@ -43,19 +35,9 @@ export default function App() {
     <ErrorBoundary>
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          {/* Public */}
           <Route path="/signin" element={<Page><SignIn /></Page>} />
           <Route path="/signup" element={<Page><SignUp /></Page>} />
-
-          {/* Private */}
-          <Route
-            path="/"
-            element={
-              <RequireAuth>
-                <Layout />
-              </RequireAuth>
-            }
-          >
+          <Route path="/" element={<RequireAuth><Layout /></RequireAuth>}>
             <Route index element={<Page><Dashboard /></Page>} />
             <Route path="transactions" element={<Page><Transactions /></Page>} />
             <Route path="subscriptions" element={<Page><Subscriptions /></Page>} />
@@ -65,7 +47,6 @@ export default function App() {
             <Route path="investments" element={<Page><Investments /></Page>} />
             <Route path="settings" element={<Page><Settings /></Page>} />
           </Route>
-
           <Route path="" element={<Navigate to="/signin" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
