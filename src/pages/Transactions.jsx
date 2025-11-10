@@ -45,21 +45,27 @@ export default function Transactions() {
               <Plus size={16} /> Quick add
             </button>
           </div>
-          <div className="text-sm text-slate-300 mb-3">Net balance impact: <span className="font-semibold">{fmtGBP.format(total)}</span></div>
+          <div className="text-sm" style={{ color: "var(--muted)" }}>
+            Net balance impact: <span className="font-semibold">{fmtGBP.format(total)}</span>
+          </div>
 
-          <div className="divide-y divide-slate-800/60">
-            {transactions.length === 0 && <div className="text-slate-400 py-8 text-center">No transactions yet.</div>}
+          <div className="divide-y" style={{ borderColor: "var(--border)" }}>
+            {transactions.length === 0 && (
+              <div className="py-8 text-center" style={{ color: "var(--muted)" }}>
+                No transactions yet.
+              </div>
+            )}
             {transactions.map((t) => (
               <div key={t.id} className="py-3 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <span className="pill">{t.category}</span>
                   <div>
                     <div className="font-medium">{t.note || (t.kind === "payment" ? "Payment" : "Expense")}</div>
-                    <div className="text-xs text-slate-400">{t.date}</div>
+                    <div className="text-xs" style={{ color: "var(--muted)" }}>{t.date}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className={`${t.kind === "payment" ? "text-emerald-400" : "text-rose-400"} font-semibold`}>
+                  <div className={`${t.kind === "payment" ? "text-emerald-600" : "text-rose-600"} font-semibold`}>
                     {t.kind === "payment" ? "+" : "-"}{fmtGBP.format(Math.abs(t.amount))}
                   </div>
                   <button className="btn btn-ghost" onClick={() => deleteTransaction(t.id)}>Delete</button>
@@ -72,9 +78,12 @@ export default function Transactions() {
         {/* Quick summary */}
         <div className="card">
           <h3 className="font-semibold mb-2">Quick summary</h3>
-          <ul className="space-y-2 text-slate-300">
+          <ul className="space-y-2" style={{ color: "var(--muted)" }}>
             <li className="flex justify-between"><span>Total items</span><span>{transactions.length}</span></li>
-            <li className="flex justify-between"><span>Net change</span><span className={`${total >= 0 ? "text-emerald-400" : "text-rose-400"} font-semibold`}>{fmtGBP.format(total)}</span></li>
+            <li className="flex justify-between">
+              <span>Net change</span>
+              <span className={`${total >= 0 ? "text-emerald-600" : "text-rose-600"} font-semibold`}>{fmtGBP.format(total)}</span>
+            </li>
           </ul>
         </div>
       </div>
@@ -83,7 +92,7 @@ export default function Transactions() {
       {panelOpen && (
         <div className="fixed inset-0 z-40">
           <div className="absolute inset-0 bg-black/40" onClick={() => setPanelOpen(false)} />
-          <div className="absolute right-0 top-0 bottom-0 w-full max-w-md card rounded-none border-l border-slate-800">
+          <div className="absolute right-0 top-0 bottom-0 w-full max-w-md card rounded-none" style={{ borderLeft: "1px solid var(--border)" }}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-lg">Add transaction</h3>
               <button className="btn btn-ghost" onClick={() => setPanelOpen(false)}><X size={18} /></button>
@@ -98,21 +107,21 @@ export default function Transactions() {
                 </label>
               </div>
               <div>
-                <label className="text-sm text-slate-300">Amount</label>
+                <div className="text-sm" style={{ color: "var(--muted)" }}>Amount</div>
                 <input name="amount" type="number" step="0.01" required className="input" placeholder="0.00" />
               </div>
               <div>
-                <label className="text-sm text-slate-300">Category</label>
+                <div className="text-sm" style={{ color: "var(--muted)" }}>Category</div>
                 <select name="category" className="input">
                   {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-sm text-slate-300">Note</label>
+                <div className="text-sm" style={{ color: "var(--muted)" }}>Note</div>
                 <input name="note" className="input" placeholder="Optional note" />
               </div>
               <div>
-                <label className="text-sm text-slate-300">Date</label>
+                <div className="text-sm" style={{ color: "var(--muted)" }}>Date</div>
                 <input name="date" type="date" className="input" defaultValue={new Date().toISOString().slice(0,10)} />
               </div>
               <div className="flex gap-2 pt-2">
