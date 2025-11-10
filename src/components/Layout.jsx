@@ -8,8 +8,8 @@ const LS_UI_SIDEBAR = "ft_ui_sidebar_open";
 
 export default function Layout() {
   const { session, signout } = useAuth();
-  const [open, setOpen] = useState(true);           // desktop sidebar
-  const [mobile, setMobile] = useState(false);      // mobile slide-over
+  const [open, setOpen] = useState(true);
+  const [mobile, setMobile] = useState(false);
 
   useEffect(() => {
     const v = localStorage.getItem(LS_UI_SIDEBAR);
@@ -21,7 +21,7 @@ export default function Layout() {
 
   return (
     <div className="h-full grid grid-cols-1 md:grid-cols-[260px_minmax(0,1fr)]">
-      {/* Sidebar */}
+      {/* Sidebar (desktop) */}
       <aside className={`sidebar hidden md:block ${open ? "w-[260px]" : "w-[88px]"} transition-all`}>
         <div className="h-full p-3 flex flex-col">
           <div className={`flex items-center ${open ? "justify-between" : "justify-center"} mb-4`}>
