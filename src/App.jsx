@@ -21,16 +21,9 @@ function RequireAuth({ children }) {
   if (!session) return <Navigate to="/signin" replace />;
   return children;
 }
-
 function Page({ children }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.18 }}
-      className="space-y-4"
-    >
+    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.18 }} className="space-y-4">
       {children}
     </motion.div>
   );
@@ -38,7 +31,6 @@ function Page({ children }) {
 
 export default function App() {
   const location = useLocation();
-
   return (
     <ErrorBoundary>
       <AnimatePresence mode="wait">
@@ -48,14 +40,7 @@ export default function App() {
           <Route path="/signup" element={<Page><SignUp /></Page>} />
 
           {/* Private */}
-          <Route
-            path="/"
-            element={
-              <RequireAuth>
-                <Layout />
-              </RequireAuth>
-            }
-          >
+          <Route path="/" element={<RequireAuth><Layout /></RequireAuth>}>
             <Route index element={<Page><Dashboard /></Page>} />
             <Route path="transactions" element={<Page><Transactions /></Page>} />
             <Route path="subscriptions" element={<Page><Subscriptions /></Page>} />
