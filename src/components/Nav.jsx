@@ -1,14 +1,7 @@
 import { NavLink } from "react-router-dom";
 import {
-  LayoutGrid,
-  CreditCard,
-  CalendarClock,
-  PiggyBank,
-  Calculator,
-  LineChart,
-  Settings,
-  Wallet,
-  Trophy,
+  LayoutGrid, CreditCard, CalendarClock, PiggyBank,
+  Calculator, LineChart, Settings, Wallet, Trophy
 } from "lucide-react";
 
 export default function Nav({ collapsed }) {
