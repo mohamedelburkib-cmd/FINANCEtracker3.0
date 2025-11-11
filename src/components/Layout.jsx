@@ -31,7 +31,7 @@ export default function Layout() {
             <Link to="/" className="flex items-center gap-2">
               <div className="text-lg font-bold">FinTrack</div>
             </Link>
-            <button className="btn btn-ghost px-2 py-1" onClick={() => setOpen((v) => !v)} title="Toggle sidebar">
+            <button className="btn btn-ghost px-2 py-1" onClick={() => setOpen(v => !v)} title="Toggle sidebar">
               {open ? <X size={16} /> : <Menu size={16} />}
             </button>
           </div>
@@ -56,10 +56,10 @@ export default function Layout() {
           <Link to="/" className="font-bold">FinTrack</Link>
           <div className="flex items-center gap-2">
             <button className="btn btn-ghost px-2" onClick={toggle} aria-label="Toggle theme">
-              {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+              {theme === "light" ? <Moon size={18}/> : <Sun size={18}/>}
             </button>
             <button className="btn btn-ghost px-2" onClick={() => setShowTheme(true)} title="Theme settings">
-              <SlidersHorizontal size={18} />
+              <SlidersHorizontal size={18}/>
             </button>
           </div>
         </div>
@@ -67,16 +67,14 @@ export default function Layout() {
 
       {/* Main */}
       <main className="p-4 md:p-8">
-        {/* Top actions (desktop) */}
         <div className="hidden md:flex justify-end mb-4 gap-2">
           <button className="btn btn-ghost" onClick={toggle}>
-            {theme === "light" ? <><Moon size={16} /> Dark</> : <><Sun size={16} /> Light</>}
+            {theme === "light" ? <><Moon size={16}/> Dark</> : <><Sun size={16}/> Light</>}
           </button>
           <button className="btn btn-secondary" onClick={() => setShowTheme(true)}>
-            <SlidersHorizontal size={16} /> Customize
+            <SlidersHorizontal size={16}/> Customize
           </button>
         </div>
-
         <Outlet />
         <footer className="text-center text-xs mt-12" style={{ color: "var(--muted)" }}>
           Data stored locally • Designed for speed
@@ -109,30 +107,27 @@ export default function Layout() {
             <div className="card max-w-lg w-full">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-semibold">Customize Theme</h3>
-                <button className="btn btn-ghost" onClick={() => setShowTheme(false)}><X size={18} /></button>
+                <button className="btn btn-ghost" onClick={() => setShowTheme(false)}><X size={18}/></button>
               </div>
               <div className="space-y-3">
                 <label className="block">
-                  <div className="text-sm" style={{ color: "var(--muted)" }}>Brand hue</div>
+                  <div className="text-sm" style={{ color: "var(--muted)" }}>Brand hue ({custom.brandHue})</div>
                   <input type="range" min="0" max="360" value={custom.brandHue}
-                         onChange={(e) => updateCustom({ brandHue: Number(e.target.value) })}
-                         className="w-full" />
+                    onChange={(e)=>updateCustom({brandHue:Number(e.target.value)})} className="w-full"/>
                 </label>
                 <label className="block">
                   <div className="text-sm" style={{ color: "var(--muted)" }}>Glass blur ({custom.blur}px)</div>
                   <input type="range" min="4" max="20" value={custom.blur}
-                         onChange={(e) => updateCustom({ blur: Number(e.target.value) })}
-                         className="w-full" />
+                    onChange={(e)=>updateCustom({blur:Number(e.target.value)})} className="w-full"/>
                 </label>
                 <label className="block">
-                  <div className="text-sm" style={{ color: "var(--muted)" }}>Glass transparency</div>
+                  <div className="text-sm" style={{ color: "var(--muted)" }}>Glass transparency ({custom.glassAlpha})</div>
                   <input type="range" step="0.01" min="0.04" max="0.3" value={custom.glassAlpha}
-                         onChange={(e) => updateCustom({ glassAlpha: Number(e.target.value) })}
-                         className="w-full" />
+                    onChange={(e)=>updateCustom({glassAlpha:Number(e.target.value)})} className="w-full"/>
                 </label>
                 <div className="flex gap-2 pt-2">
                   <button className="btn btn-secondary" onClick={resetCustom}>Reset</button>
-                  <button className="btn btn-primary" onClick={() => setShowTheme(false)}>Done</button>
+                  <button className="btn btn-primary" onClick={()=>setShowTheme(false)}>Done</button>
                 </div>
               </div>
             </div>
