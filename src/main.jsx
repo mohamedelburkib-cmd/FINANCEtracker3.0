@@ -1,10 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { HashRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom"; // using hash routing to avoid 404s on Vercel
 import App from "./App.jsx";
 import "./index.css";
-
-console.log("[main] mounting…");
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
