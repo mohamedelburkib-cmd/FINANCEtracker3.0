@@ -21,24 +21,19 @@ export default function SpendByCategoryChart() {
     return { labels, values };
   }, [transactions]);
 
-  const data = {
-    labels,
-    datasets: [{
-      data: values,
-    }],
-  };
+  const data = { labels, datasets: [{ data: values }] };
 
   const options = {
     animation: { duration: 300, easing: "easeOutQuart" },
     plugins: {
       legend: { position: "bottom", labels: { color: "var(--muted)" } },
-      tooltip: { enabled: true },
+      tooltip: { enabled: true }
     },
     hover: {
       onHover: (evt, active) => {
         evt.native.target.style.cursor = active?.length ? "pointer" : "default";
-      },
-    },
+      }
+    }
   };
 
   return <Doughnut data={data} options={options} />;
