@@ -18,7 +18,7 @@ export default function Goals() {
     addGoal({
       id: crypto.randomUUID?.() ?? Date.now().toString(),
       name, target, saved, deadline, category,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date().toISOString()
     });
     e.currentTarget.reset();
     setOpen(false);
