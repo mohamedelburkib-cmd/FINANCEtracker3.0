@@ -29,7 +29,7 @@ export default function Transactions() {
       amount: Math.abs(amount),
       category,
       note,
-      date,
+      date
     });
     e.currentTarget.reset();
     setPanelOpen(false);
@@ -75,7 +75,6 @@ export default function Transactions() {
           </div>
         </div>
 
-        {/* Quick summary */}
         <div className="card">
           <h3 className="font-semibold mb-2">Quick summary</h3>
           <ul className="space-y-2" style={{ color: "var(--muted)" }}>
@@ -88,7 +87,6 @@ export default function Transactions() {
         </div>
       </div>
 
-      {/* Slide-over panel */}
       {panelOpen && (
         <div className="fixed inset-0 z-40">
           <div className="absolute inset-0 bg-black/40" onClick={() => setPanelOpen(false)} />
